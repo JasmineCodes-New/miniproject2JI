@@ -6,20 +6,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from pathlib import Path
 
-df = pd.DataFrame(
-    {
-        "Name": [
-            "Braund, Mr. Owen Harris",
-            "Allen, Mr. William Henry",
-            "Bonnell, Miss. Elizabeth",
-        ],
-        "Age": [22, 35, 58],
-        "Sex": ["male", "male", "female"],
-    }
-)
+# Research question: What director has directed the most movies on Netflix?
 
-#print(list(df.columns))
-#print(df['Age'])
 
 
 
