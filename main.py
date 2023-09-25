@@ -6,25 +6,53 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from pathlib import Path
 
-# Research question: What director has directed the most movies on Netflix?
-data = pd.read_csv("netflix_titles.csv")
+# Research question: What director has directed the most movies on Netflix? - includes release years
+def analyze_netflix_data(dataset_file):
+    # Ensure that the "charts" folder exists or create it if not
+    try:
+        Path("charts").mkdir()
+    except FileExistsError:
+        pass
 
-director_counts = data['director'].value_counts()
+    # Load the Netflix dataset
+    data = pd.read_csv(dataset_file)
 
-most_movies_director = director_counts.idxmax()
+    # Count the movies directed by each director
+    director_counts = data['director'].value_counts()
 
-most_movies_count = director_counts.max()
+    # Find the top 5 directors with the most movies
+    top_directors = director_counts.head(5)
 
-print(f"The director with the most movies on Netflix is {most_movies_director} with {most_movies_count} movies.")
+    for director_name, movie_count in top_directors.items():
+        print(f"The director '{director_name}' has directed {movie_count} movies on Netflix.")
 
+        # Filter the dataset for movies directed by the current director
+        director_data = data[data['director'] == director_name]
 
+        # Group the movies by release year and count the number of movies for each year
+        year_counts = director_data['release_year'].value_counts().sort_index()
 
-# Create our charts folder
-# try:
-#     Path("charts").mkdir()
-# except FileExistsError:
-#     pass
+        # Create a line chart for the current director
+        plt.figure(figsize=(12, 6))  # Increase the figure size
+        plt.plot(year_counts.index, year_counts.values, marker='o', linestyle='-', label=f'{director_name}')
+        plt.xlabel('Release Year')
+        plt.ylabel('Number of Movies')
+        plt.title(f'Number of Movies Directed by {director_name} Over the Years')
+        plt.xticks(rotation=45)  # Rotate the x-axis labels
+        plt.legend()
+        plt.grid(True)
+        plt.tight_layout()
 
+        # Save the chart as a PNG file in the charts folder
+        chart_filename = f'charts/{director_name}_movie_trends.png'
+        plt.savefig(chart_filename)
+
+        # Close the current plot
+        plt.close()
+
+if __name__ == "__main__":
+    dataset_file = "netflix_titles.csv"
+    analyze_netflix_data(dataset_file)
 
 
 # (5/5 points) Initial comments with your name, class and project at the top of your .py file.
