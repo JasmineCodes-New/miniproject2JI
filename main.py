@@ -7,16 +7,23 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 
 # Research question: What director has directed the most movies on Netflix?
+data = pd.read_csv("netflix_titles.csv")
 
+director_counts = data['director'].value_counts()
 
+most_movies_director = director_counts.idxmax()
+
+most_movies_count = director_counts.max()
+
+print(f"The director with the most movies on Netflix is {most_movies_director} with {most_movies_count} movies.")
 
 
 
 # Create our charts folder
-try:
-    Path("charts").mkdir()
-except FileExistsError:
-    pass
+# try:
+#     Path("charts").mkdir()
+# except FileExistsError:
+#     pass
 
 
 
